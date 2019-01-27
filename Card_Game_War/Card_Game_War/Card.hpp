@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CARD_HPP
+#define CARD_HPP
 
 class Card
 {
@@ -19,3 +20,4 @@ private:
 	Suit suit_;
 	Rank rank_;
 };
+#endif  // !CARD_HPP
