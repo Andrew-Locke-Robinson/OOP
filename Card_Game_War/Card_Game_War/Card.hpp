@@ -1,5 +1,8 @@
+#pragma once
+
 class Card
 {
+public:
 	enum Suit {
 		spade,club,diamond,heart
 	};
@@ -8,9 +11,9 @@ class Card
 		two,three,four,five,six,seven,eight,nine,ten,jack,queen,king,ace
 	};
 
-
-public:
-	Set
+	Card(Suit suit, Rank rank):
+		suit_(suit), rank_(rank)
+	{}
 
 private:
 	Suit suit_;
