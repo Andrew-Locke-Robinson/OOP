@@ -1,10 +1,14 @@
 #include <iostream>
 #include <vector>
-#include "Deck.hpp"
+#include <cstdlib>
+#include <ctime>
+#include "War.hpp"
 
 int main()
 {
-	Deck main_deck;
+	std::srand(std::time(nullptr));
+
+	War game;
 
 	for (int s = 0; s < 4; ++s)
 	{

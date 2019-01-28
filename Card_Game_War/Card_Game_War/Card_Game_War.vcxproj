@@ -114,10 +114,12 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="War.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.hpp" />
     <ClInclude Include="Deck.hpp" />
+    <ClInclude Include="War.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

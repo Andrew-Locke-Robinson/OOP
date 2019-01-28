@@ -2,15 +2,17 @@
 #define DECK_HPP
 
 #include "Card.hpp"
-#include <vector>
+#include <deque>
 
 class Deck
 {
 public:
+	Deck();
+	~Deck();
 
 	void AddCard(Card &card);
 
 private:
-	std::vector<Card> deck_;
+	std::deque<Card> deck_;
 };
 #endif  // !DECK_HPP
