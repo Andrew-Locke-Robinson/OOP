@@ -15,6 +15,7 @@ public:
 	void RandomIntArraySwap(int* int_list, int position);
 	bool GameOver();
 	void AddCardToPot();
+	int WhoWon();
 
 private:
 	Deck player1_;

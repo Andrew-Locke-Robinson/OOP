@@ -16,6 +16,9 @@ War::~War()
 
 int War::PlayWar()
 {
+	// Shuffles a 52 card deck and splits it in half for two players
+	InitializePlayerDecks();
+
 	do {
 		// if the players have the same top card, put the first two cards into the pot
 		if (player1_.deck_.front().rank_ == player2_.deck_.front().rank_)
@@ -25,7 +28,7 @@ int War::PlayWar()
 				AddCardToPot();
 				if (GameOver())
 				{
-					return 1;
+					return WhoWon();
 				}
 			}
 		}
@@ -40,7 +43,7 @@ int War::PlayWar()
 			}
 			if (GameOver())
 			{
-				return 1;
+				return WhoWon();
 			}
 		}
 		else {
@@ -53,7 +56,7 @@ int War::PlayWar()
 			}
 			if (GameOver())
 			{
-				return 1;
+				return WhoWon();
 			}
 		}
 	} while (true);
@@ -62,6 +65,15 @@ int War::PlayWar()
 
 void War::InitializePlayerDecks()
 {
+	while (!player1_.deck_.empty())
+	{
+		player1_.deck_.pop_front();
+	}
+	while (!player2_.deck_.empty())
+	{
+		player2_.deck_.pop_front();
+	}
+
 	int random_list [52];
 
 	// initialize list with nums 0-51
@@ -115,9 +127,24 @@ bool War::GameOver()
 
 void War::AddCardToPot()
 {
-	pot_.push_back(player1_.deck_.front());
-	pot_.push_back(player2_.deck_.front());
+	if (rand() % 2 == 0)
+	{
+		pot_.push_back(player1_.deck_.front());
+		pot_.push_back(player2_.deck_.front());
+	}else{
+		pot_.push_back(player2_.deck_.front());
+		pot_.push_back(player1_.deck_.front());
+	}
 	player1_.deck_.pop_front();
 	player2_.deck_.pop_front();
+}
+
+int War::WhoWon()
+{
+	if (player2_.deck_.empty())
+	{
+		return 1;
+	}
+	return 2;
 }
 
