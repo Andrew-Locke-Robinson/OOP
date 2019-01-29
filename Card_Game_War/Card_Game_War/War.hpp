@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "Deck.hpp"
 
 class War
@@ -12,9 +13,12 @@ public:
 
 	void InitializePlayerDecks();
 	void RandomIntArraySwap(int* int_list, int position);
+	bool GameOver();
+	void AddCardToPot();
 
 private:
-	Deck player1_deck_;
-	Deck player2_deck_;
+	Deck player1_;
+	Deck player2_;
+	std::vector<Card> pot_;
 };
 

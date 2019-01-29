@@ -11,6 +11,7 @@ int main()
 	War game;
 
 	game.InitializePlayerDecks();
+	game.PlayWar();
 
 	int x;
 	std::cin >> x;

@@ -16,7 +16,6 @@ public:
 		suit_(suit), rank_(rank)
 	{}
 
-private:
 	Suit suit_;
 	Rank rank_;
 };
