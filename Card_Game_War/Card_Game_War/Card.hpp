@@ -13,10 +13,14 @@ public:
 	};
 
 	Card(Suit suit, Rank rank):
-		suit_(suit), rank_(rank)
-	{}
+		data_(static_cast<unsigned>(suit) << 4 | static_cast<unsigned>(rank))
+	{
+	}
 
-	Suit suit_;
-	Rank rank_;
+	Rank Get_Rank() { return static_cast<Rank>(data_ & 0xf); }
+	Suit Get_Suit() { return static_cast<Suit>(data_ >> 4); }
+
+private:
+	unsigned char data_;
 };
 #endif  // !CARD_HPP

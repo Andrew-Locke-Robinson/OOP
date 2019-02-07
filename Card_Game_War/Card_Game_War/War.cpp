@@ -21,7 +21,7 @@ int War::PlayWar()
 
 	do {
 		// if the players have the same top card, put the first two cards into the pot
-		if (player1_.deck_.front().rank_ == player2_.deck_.front().rank_)
+		if (player1_.deck_.front().Get_Rank() == player2_.deck_.front().Get_Rank())
 		{
 			for (int i = 0; i < 2; ++i)
 			{
@@ -32,7 +32,7 @@ int War::PlayWar()
 				}
 			}
 		}
-		else if (player1_.deck_.front().rank_ > player2_.deck_.front().rank_)
+		else if (player1_.deck_.front().Get_Rank() > player2_.deck_.front().Get_Rank())
 		{
 			AddCardToPot();
 			int size_of_pot = pot_.size();
