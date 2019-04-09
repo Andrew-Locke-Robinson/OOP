@@ -19,7 +19,7 @@ class TetrisGame {
   const sf::RenderWindow* GetWindow() const { return window; }
 
  private:
-  GameClock GameClock_;
+  GameClock GameClock_,TurnClock_;
   int figures[7][4] = {
       1, 3, 5, 7,  // I
       2, 4, 5, 7,  // Z
@@ -36,9 +36,9 @@ class TetrisGame {
   sf::Sprite s, background, frame;
 
   const static int M = 20;
-  const static int N = 10;
+  const static int N = 20;
 
-  int dx = 0;
+  int dx,dy = 0;
   bool rotate = 0;
   int colorNum = 1;
 

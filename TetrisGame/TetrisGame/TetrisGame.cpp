@@ -9,12 +9,14 @@ TetrisGame::TetrisGame() {
   background = sf::Sprite(t2);
   frame = sf::Sprite(t3);
 
-  window = new sf::RenderWindow(sf::VideoMode(320, 480), "The Game!");
+  window = new sf::RenderWindow(sf::VideoMode(360, 360), "The Game!");
+
+  TurnClock_.delay = 5.0f;
 
   int n = rand() % 7;
   for (int i = 0; i < 4; i++) {
-    PlayerTetromino_[i].x = figures[n][i] % 2;
-    PlayerTetromino_[i].y = figures[n][i] / 2;
+    PlayerTetromino_[i].x = figures[n][i] % 2 + 9;
+    PlayerTetromino_[i].y = figures[n][i] / 2 + 8;
   }
 }
 
@@ -22,27 +24,33 @@ TetrisGame::~TetrisGame() { delete window; }
 
 void TetrisGame::GameLoop() {
   GameClock_.Update();
+  TurnClock_.Update();
 
   sf::Event e;
+  dx = 0;
+  dy = 0;
   while (window->pollEvent(e)) {
     if (e.type == sf::Event::Closed) window->close();
 
     if (e.type == sf::Event::KeyPressed) {
-      if (e.key.code == sf::Keyboard::Up)
-        rotate = true;
-      else if (e.key.code == sf::Keyboard::Left)
-        dx = -1;
+		if (e.key.code == sf::Keyboard::Space)
+			rotate = 1;
+	  else if (e.key.code == sf::Keyboard::Left)
+        dx += -1;
       else if (e.key.code == sf::Keyboard::Right)
-        dx = 1;
+        dx += 1;
+	  else if (e.key.code == sf::Keyboard::Up)
+		  dy += -1;
+	  else if (e.key.code == sf::Keyboard::Down)
+		  dy += 1;
     }
   }
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) GameClock_.delay = 0.05;
 
   //// <- Move -> ///
   for (int i = 0; i < 4; i++) {
     PlaceHolderTetromino_[i] = PlayerTetromino_[i];
     PlayerTetromino_[i].x += dx;
+	PlayerTetromino_[i].y += dy;
   }
   if (!check())
     for (int i = 0; i < 4; i++) PlayerTetromino_[i] = PlaceHolderTetromino_[i];
@@ -64,11 +72,10 @@ void TetrisGame::GameLoop() {
   ///////Tick//////
   if (GameClock_.timer > GameClock_.delay) {
     for (int i = 0; i < 4; i++) {
-      PlaceHolderTetromino_[i] = PlayerTetromino_[i];
-      PlayerTetromino_[i].y += 1;
-    }
+      PlaceHolderTetromino_[i] = PlayerTetromino_[i];    }
 
-    if (!check()) {
+    if (TurnClock_.timer > TurnClock_.delay) {
+		TurnClock_.timer = 0;
       for (int i = 0; i < 4; i++)
         field[PlaceHolderTetromino_[i].y][PlaceHolderTetromino_[i].x] =
             colorNum;
@@ -76,8 +83,13 @@ void TetrisGame::GameLoop() {
       colorNum = 1 + rand() % 7;
       int n = rand() % 7;
       for (int i = 0; i < 4; i++) {
-        PlayerTetromino_[i].x = figures[n][i] % 2;
-        PlayerTetromino_[i].y = figures[n][i] / 2;
+        PlayerTetromino_[i].x = figures[n][i] % 2+9;
+        PlayerTetromino_[i].y = figures[n][i] / 2+7;
+		//If you lose, u lose *sad face*
+		if (field[PlayerTetromino_[i].y][PlayerTetromino_[i].x])
+		{
+			window->close();
+		}
       }
     }
 
@@ -86,13 +98,69 @@ void TetrisGame::GameLoop() {
 
   ///////check lines//////////
   int k = M - 1;
-  for (int i = M - 1; i > 0; i--) {
+  int i;
+  for (i = M - 1; i > M/2; i--) {
     int count = 0;
     for (int j = 0; j < N; j++) {
       if (field[i][j]) count++;
       field[k][j] = field[i][j];
     }
     if (count < N) k--;
+  }
+  
+  for (k; k > M/2; --k)
+  {
+	  for (int j = 0; j < N; j++) {
+		  field[k][j] = 0;
+	  }
+  }
+  k = 0;
+  for (i = 0; i < M / 2; i++) {
+	  int count = 0;
+	  for (int j = 0; j < N; j++) {
+		  if (field[i][j]) count++;
+		  field[k][j] = field[i][j];
+	  }
+	  if (count < N) k++;
+  }
+  
+  for (k; k < M/2; ++k)
+  {
+	  for (int j = 0; j < N; j++) {
+		  field[k][j] = 0;
+	  }
+  }
+  k = N-1;
+  for (i = M - 1; i > M / 2; i--) {
+	  int count = 0;
+	  for (int j = 0; j < N; j++) {
+		  if (field[j][i]) count++;
+		  field[j][k] = field[j][i];
+	  }
+	  if (count < N) k--;
+  }
+  
+  for (k; k > M/2; --k)
+  {
+	  for (int j = 0; j < N; j++) {
+		  field[j][k] = 0;
+	  }
+  }
+  k = 0;
+  for (int i = 0; i < M / 2; i++) {
+	  int count = 0;
+	  for (int j = 0; j < N; j++) {
+		  if (field[j][i]) count++;
+		  field[j][k] = field[j][i];
+	  }
+	  if (count < N) k++;
+  }
+  
+  for (k; k < M / 2; ++k)
+  {
+	  for (int j = 0; j < N; j++) {
+		  field[j][k] = 0;
+	  }
   }
 
   dx = 0;
@@ -101,31 +169,29 @@ void TetrisGame::GameLoop() {
 
   /////////draw//////////
   window->clear(sf::Color::White);
-  window->draw(background);
+  //window->draw(background);
 
   for (int i = 0; i < M; i++)
     for (int j = 0; j < N; j++) {
       if (field[i][j] == 0) continue;
       s.setTextureRect(sf::IntRect(field[i][j] * 18, 0, 18, 18));
       s.setPosition(j * 18, i * 18);
-      s.move(28, 31);  // offset
       window->draw(s);
     }
 
   for (int i = 0; i < 4; i++) {
     s.setTextureRect(sf::IntRect(colorNum * 18, 0, 18, 18));
     s.setPosition(PlayerTetromino_[i].x * 18, PlayerTetromino_[i].y * 18);
-    s.move(28, 31);  // offset
     window->draw(s);
   }
 
-  window->draw(frame);
+  //window->draw(frame);
   window->display();
 }
 bool TetrisGame::check() {
   for (int i = 0; i < 4; i++)
     if (PlayerTetromino_[i].x < 0 || PlayerTetromino_[i].x >= N ||
-        PlayerTetromino_[i].y >= M)
+        PlayerTetromino_[i].y >= M || PlayerTetromino_[i].y < 0)
       return 0;
     else if (field[PlayerTetromino_[i].y][PlayerTetromino_[i].x])
       return 0;
