@@ -26,26 +26,6 @@ void TetrisGame::GameLoop() {
   GameClock_.Update();
   TurnClock_.Update();
 
-  sf::Event e;
-  dx = 0;
-  dy = 0;
-  while (window->pollEvent(e)) {
-    if (e.type == sf::Event::Closed) window->close();
-
-    if (e.type == sf::Event::KeyPressed) {
-		if (e.key.code == sf::Keyboard::Space)
-			rotate = 1;
-	  else if (e.key.code == sf::Keyboard::Left)
-        dx += -1;
-      else if (e.key.code == sf::Keyboard::Right)
-        dx += 1;
-	  else if (e.key.code == sf::Keyboard::Up)
-		  dy += -1;
-	  else if (e.key.code == sf::Keyboard::Down)
-		  dy += 1;
-    }
-  }
-
   //// <- Move -> ///
   for (int i = 0; i < 4; i++) {
     PlaceHolderTetromino_[i] = PlayerTetromino_[i];
@@ -187,6 +167,13 @@ void TetrisGame::GameLoop() {
 
   //window->draw(frame);
   window->display();
+
+  //clean up the velocities before the next game loop
+  //this is pretty ugly, because it doesnt jive with the
+  //event listener model that is used very well
+
+  dx = 0;
+  dy = 0;
 }
 bool TetrisGame::check() {
   for (int i = 0; i < 4; i++)

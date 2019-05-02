@@ -3,20 +3,36 @@
 
 #include <SFML/Graphics.hpp>
 #include "GameClock.hpp"
+#include "Event_Listener.hpp"
 
 struct point {
   int x;
   int y;
 };
 
-class TetrisGame {
+class TetrisGame: public Event_Listener {
  public:
   TetrisGame();
   ~TetrisGame();
 
   void GameLoop();
   bool check();
-  const sf::RenderWindow* GetWindow() const { return window; }
+  sf::RenderWindow* GetWindow() { return window; }
+
+  void on_key_press(sf::Event e) override 
+  {
+	  if (e.key.code == sf::Keyboard::Space)
+		  rotate = 1;
+	  else if (e.key.code == sf::Keyboard::Left)
+		  dx += -1;
+	  else if (e.key.code == sf::Keyboard::Right)
+		  dx += 1;
+	  else if (e.key.code == sf::Keyboard::Up)
+		  dy += -1;
+	  else if (e.key.code == sf::Keyboard::Down)
+		  dy += 1;
+  }
+  void on_close() override { window->close(); }
 
  private:
   GameClock GameClock_,TurnClock_;

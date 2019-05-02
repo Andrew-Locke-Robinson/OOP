@@ -126,6 +126,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Event_Listener.cpp" />
+    <ClCompile Include="Event_Receiver.cpp" />
     <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TetrisGame.cpp" />
@@ -136,6 +138,8 @@
     <Image Include="..\..\..\games\01 Tetris\images\tiles.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Event_Listener.hpp" />
+    <ClInclude Include="Event_Receiver.hpp" />
     <ClInclude Include="GameClock.hpp" />
     <ClInclude Include="TetrisGame.hpp" />
   </ItemGroup>
